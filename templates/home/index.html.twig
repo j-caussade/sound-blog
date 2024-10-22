@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sound blog{% endblock %}
+
+{% block body %}
+
+  <section class=" min-h-full h-fit flex flex-row flex-wrap justify-center gap-5">
+
+    {% for article in articles %}
+
+      <div class="card bg-base-100 w-96 shadow-xl">
+        <figure>
+          <img
+          src="uploads/{{article.image}}"
+          alt="Cover" />
+        </figure>
+        <div class="card-body">
+          <h2 class="card-title">
+            {{ article.title }}
+            <div class="badge text-white 
+              {% if article.category.name == "Single" %}
+                 bg-orange-500
+                 {% elseif article.category.name == "Maxi" %}
+                  bg-green-500
+                  {% elseif article.category.name == "Album" %}
+                   bg-blue-500
+                   {% elseif article.category.name == "Compilation" %}
+                    bg-violet-500
+              {% endif %}
+            ">{{ article.category.name }}</div>
+          </h2>
+          <p>{{ article.intro }}</p>
+          <div class="card-actions justify-end">
+            {% for tag in article.tag %}
+              <div class="badge badge-outline">{{ tag.name }}</div>
+            {% endfor %}
+          </div>
+          <a href="{{ path('app_article_display', {'id': article.id}) }}" class="btn btn-primary mt-8">Read more</a>
+        </div>
+      </div>
+
+    {% endfor %}
+
+  </section>
+
+{% endblock %}

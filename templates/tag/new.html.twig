@@ -1,0 +1,29 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block body %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+
+        <h1>{{ name }}</h1>
+
+        {{ form_start(form) }}
+        <div class=" flex gap-4">
+            {{ form_widget(form) }}
+            <button type="submit" class=" btn btn-primary">Add a new tag</button>
+        </div>
+        {{ form_end(form) }}
+        <a href="{{ path('app_category') }}" class=" btn btn-outline btn-primary">Cancel</a>
+        
+        {% else %}
+            <div class=" w-full h-full flex justify-center items-center">
+                <div role="alert" class="alert alert-error w-fit">
+                    <img src="{{ asset('img/warning.svg')}}" alt="Warning icon" class=" w-6">
+                    <span>Your access to this page is not authorized</span>
+                </div>
+            </div>
+
+    {% endif %}
+
+{% endblock %}

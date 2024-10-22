@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block body %}
+
+<h1 class="text-5xl font-bold w-full">{{ name }}</h1>
+
+    <form method="post" class=" flex flex-col gap-8 mb-16">
+        {% if error %}
+            <div role= "alert" class="alert alert-error w-fit">
+                <img src="{{ asset('img/warning.svg')}}" alt="Warning icon" class=" w-6">
+                <span>{{ error.messageKey|trans(error.messageData, 'security') }}</span>
+            </div>
+        {% endif %}
+
+        {% if app.user %}
+            <div class="mb-3">
+                You are logged in as {{ app.user.userIdentifier }} <a href="{{ path('app_logout') }}" class=" btn btn-primary">Log out</a>
+            </div>
+            {% else %}
+                <label for="username" class="input input-bordered flex items-center gap-2 w-[250px]">
+                    <img src="{{ asset('img/mail.svg') }}" alt="Mail icon">
+                    <input type="email" value="{{ last_username }}" name="_username" id="username" autocomplete="email" required autofocus placeholder="Email" class="form-control"/>
+                </label>
+
+                <label for="password" class="input input-bordered flex items-center gap-2 w-[250px]">
+                    <img src="{{ asset('img/password.svg') }}" alt="Password icon">
+                    <input type="password" name="_password" id="password" autocomplete="current-password" required placeholder="Password" class="form-control"/>
+                </label>
+
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                {#
+                    Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                    See https://symfony.com/doc/current/security/remember_me.html
+
+                    <div class="checkbox mb-3">
+                        <input type="checkbox" name="_remember_me" id="_remember_me">
+                        <label for="_remember_me">Remember me</label>
+                    </div>
+                #}
+
+                <button class="btn btn-primary w-[255px]" type="submit">
+                    Sign in
+                </button>
+                </form>
+
+                <a href="{{ path("app_register")}}" class="btn btn-outline btn-primary w-[255px]" type="submit">
+                Register
+                </a>
+        {% endif %}
+
+
+
+
+
+{% endblock %}

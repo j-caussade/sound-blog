@@ -1,0 +1,45 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Article{% endblock %}
+
+{% block body %}
+
+    <section class=" min-h-full h-fit flex flex-col justify-center gap-5 w-1/2 m-auto">
+
+        <figure>
+            <img src={{ asset('uploads/' ~ article.image) }} alt="Cover">
+        </figure>
+        
+        <h1 class="text-5xl font-bold flex items-center gap-8">{{ article.title }}
+            <div class="badge  text-white 
+                {% if article.category.name == "Single" %}
+                 bg-orange-500
+                 {% elseif article.category.name == "Maxi" %}
+                  bg-green-500
+                  {% elseif article.category.name == "Album" %}
+                   bg-blue-500
+                   {% elseif article.category.name == "Compilation" %}
+                    bg-violet-500
+                {% endif %}
+            ">{{ article.category.name }}</div>
+        </h1>
+        
+        <p>{{ article.intro }}</p>
+        <p>{{ article.content }}</p>
+        
+        <div class="card-actions justify-end">
+            {% for tag in article.tag %}
+              <div class="badge badge-outline">{{ tag.name }}</div>
+            {% endfor %}
+        </div>
+        <div class=" flex flex-row">
+
+            <a href="{{ path("app_home") }}" class="btn btn-primary">Go back</a>
+            <a href="{{ path("app_article_display_edit", {'id': article.id}) }}" class="btn btn-secondary">Edit</a>
+        </div>
+
+    </section>
+
+{% endblock %}

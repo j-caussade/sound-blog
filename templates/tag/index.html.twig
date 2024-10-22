@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ name }}{% endblock %}
+
+{% block body %}
+
+    {% if is_granted('ROLE_ADMIN') %}
+
+        <h1 class="text-5xl font-bold w-full">{{ name }}</h1>
+
+        {% for tag in tags %}
+            <p>{{ tag.name }}</p>
+        {% endfor %}
+
+        <a href="{{ path('app_tag_new')}}" class=" btn btn-primary">Create a new one</a>
+
+        {% else %}
+
+            <div class=" w-full h-full flex justify-center items-center">
+                <div role="alert" class="alert alert-error w-fit">
+                    <img src="{{ asset('img/warning.svg')}}" alt="Warning icon" class=" w-6">
+                    <span>Your access to this page is not authorized</span>
+                </div>
+            </div>
+
+    {% endif %}
+{% endblock %}

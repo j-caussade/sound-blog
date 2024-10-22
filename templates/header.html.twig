@@ -1,0 +1,25 @@
+<header>
+
+    <div class="navbar bg-base-100">
+
+        <div class="navbar-start">
+            <a class="btn btn-ghost text-xl" href="{{ path("app_home") }}"><img src="{{ asset('img/speaker.svg') }}" alt="Speaker icon" class=" fill-current">Home</a>
+            {% if app.user %}
+                <a class="btn btn-ghost text-xl" href="{{ path("app_article_write") }}"><img src="{{ asset('img/write.svg') }}" alt="Home icon"  class=" text-current">Write</a>
+                {# <a class="btn btn-ghost text-xl" href="{{ path("app_article_write") }}"><img src="{{ asset('img/write.svg') }}" alt="Home icon"  class=" text-current">Write</a> #}
+            {% endif %}
+        </div>
+
+        <div class="navbar-end">
+            <a href="{{ path("app_login") }}" class="btn">
+                {% if app.user %}
+                    <img src="{{ asset('img/account.svg') }}" alt="Account off icon">
+                        {% else %}
+                            <img src="{{ asset('img/account_off.svg') }}" alt="Account off icon">
+                {% endif %}
+            </a>
+        </div>
+
+    </div>
+
+</header>
