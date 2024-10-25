@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Article;
-use App\Entity\Tag;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +11,6 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class HomeController extends AbstractController
 {
@@ -23,12 +21,44 @@ class HomeController extends AbstractController
     }
 
     #[Route('/', name: 'app_home')]
-    public function index(ArticleRepository $articleRepository): Response
+    public function index(Request $request, ArticleRepository $articleRepository): Response
     {
-        $articles = $articleRepository->findAll();
+        $orderBy = $request->query->get('orderBy', 'date');
+        $order = $request->query->get('order', 'DESC');
+        $articles = $articleRepository->findByOrder($orderBy, $order);
+        $categoryOrders = [
+            'single' => $order,
+            'maxi' => $order,
+            'album' => $order,
+            'compilation' => $order,
+        ];
         return $this->render('home/index.html.twig', [
             'name' => 'Home',
             'articles' => $articles,
+            'orderBy' => $orderBy,
+            'order' => $order,
+            'categoryOrders' => $categoryOrders,
+        ]);
+    }
+
+    #[Route('/filter/{categoryName}', name: 'app_filter_category')]
+    public function filterByCategory(Request $request, $categoryName, ArticleRepository $articleRepository): Response
+    {
+        $orderBy = $request->query->get('orderBy', 'date');
+        $order = $request->query->get('order', 'ASC');
+        $articles = $articleRepository->findByCategoryName($categoryName, $orderBy, $order);
+        $categoryOrders = [
+            'single' => $categoryName === 'single' ? $order : 'ASC',
+            'maxi' => $categoryName === 'maxi' ? $order : 'ASC',
+            'album' => $categoryName === 'album' ? $order : 'ASC',
+            'compilation' => $categoryName === 'compilation' ? $order : 'ASC',
+        ];
+        return $this->render('home/index.html.twig', [
+            'name' => 'Home',
+            'articles' => $articles,
+            'orderBy' => $orderBy,
+            'order' => $order,
+            'categoryOrders' => $categoryOrders,
         ]);
     }
 
@@ -39,12 +69,13 @@ class HomeController extends AbstractController
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-        if($form->isSubmitted() and $form->isValid()) {
+    
+        if ($form->isSubmitted() && $form->isValid()) {
             $imageFile = $form->get('imageFile')->getData();
-
+    
             if ($imageFile) {
                 $newFilename = uniqid() . '.' . $imageFile->guessExtension();
-
+    
                 try {
                     $imageFile->move(
                         $this->uploadsDir,
@@ -57,23 +88,36 @@ class HomeController extends AbstractController
             } else {
                 $article->setImage('white_label.webp');
             }
-
+    
+            $date = $form->get('date')->getData();
+            $article->setDate($date);
+    
             $entityManagerInterface->persist($article);
             $entityManagerInterface->flush();
+    
             return $this->redirectToRoute('app_home');
         }
+    
         return $this->render('home/write.html.twig', [
             'name' => 'Write',
             'form' => $form->createView(),
         ]);
-
     }
 
     #[Route('/article/{id}', name: 'app_article_display')]
-    public function displayArticle(int $id, ArticleRepository $articleRepository): Response
+    public function displayArticle(Article $article): Response
     {
-        $article = $articleRepository->find($id);
         return $this->render('home/display.html.twig', ['article'=>$article]);
+    }
+
+    #[Route('/article/{id}/delete', name: 'app_article_delete')]
+    public function delete(Article $article, EntityManagerInterface $entityManagerInterface)
+    {
+        if ($article) {
+            $entityManagerInterface->remove($article);
+            $entityManagerInterface->flush();
+            return $this->redirectToRoute('app_home');
+        }
     }
 
     #[Route('/article/{id}/edit', name: 'app_article_display_edit')]
@@ -109,9 +153,6 @@ class HomeController extends AbstractController
     
             $entityManagerInterface->persist($article);
             $entityManagerInterface->flush();
-
-            
-
 
             return $this->redirectToRoute('app_home');
         }
