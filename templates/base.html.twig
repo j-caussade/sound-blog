@@ -4,32 +4,21 @@
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <title>{% block title %}Sound blog{% endblock %}</title>
-          {# <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>"/> #}
           <script src="https://cdn.tailwindcss.com"></script>
           <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
           <script src="https://cdn.tailwindcss.com"></script>
-          <!-- <script src="main.js" defer></script> -->
           <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-          {# // <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> #}
           {% block stylesheets %} {% endblock %}
           {% block javascripts %} 
                {% block importmap %}{{ importmap("app") }}{% endblock %}
           {% endblock %}
      </head>
-     <body class=" flex flex-col h-full">
+     <body class=" flex flex-col h-fit min-h-full">
           {% include "header.html.twig" %}
-          <main class=" flex-grow bg-zinc-900 p-5">
+          <main class=" flex-grow bg-zinc-900 h-fit">
               {% block body %}{% endblock %}
           </main>
           {% include "footer.html.twig" %}
      </body>
-     <script>
-          // $(document).ready(function() {
-          //       $('.select2-multiple').select2({
-          //           placeholder: 'Select an option',
-          //           allowClear: true
-          //       });
-          //   });
-     </script>
 </html>

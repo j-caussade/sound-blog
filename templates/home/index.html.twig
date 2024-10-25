@@ -4,17 +4,62 @@
 
 {% block body %}
 
-  <section class=" min-h-full h-fit flex flex-row flex-wrap justify-center gap-5">
+<div class="navbar bg-base-200 gap-8 p-4 justify-center"  style="position: sticky; top: 64px; z-index: 1;">
+  <div class="gap-2">
+    <p>Filter by:</p>
+    <a href="{{ path('app_home') }}" class="btn btn-neutral text-white">
+        All
+    </a>
+    <a href="{{ path('app_filter_category', {'categoryName': 'single'}) }}" class="btn bg-orange-500 text-white">
+        Single
+    </a>
+    <a href="{{ path('app_filter_category', {'categoryName': 'maxi'}) }}" class="btn bg-green-500 text-white">
+        Maxi
+    </a>
+    <a href="{{ path('app_filter_category', {'categoryName': 'album'}) }}" class="btn bg-blue-500 text-white">
+        Album
+    </a>
+    <a href="{{ path('app_filter_category', {'categoryName': 'compilation'}) }}" class="btn bg-violet-500 text-white">
+        Compilation
+    </a>
+  </div>
+  <div class="gap-2">
+    <p>Order by:</p>
+    <a href="{{ path('app_home') }}?orderBy=date&order={{ order == 'DESC' ? 'ASC' : 'DESC' }}" class="btn btn-neutral text-white">
+        Date
+        {% if orderBy == 'date' and order == 'DESC' %}
+            <img src="{{ asset('img/arrow_upward_alt.svg') }}" alt="">
+        {% else %}
+            <img src="{{ asset('img/arrow_downward_alt.svg') }}" alt="">
+        {% endif %}
+    </a>
+    <a href="{{ path('app_home') }}?orderBy=like&order={{ order == 'DESC' ? 'ASC' : 'DESC' }}" class="btn btn-neutral text-white">
+        Like
+        {% if orderBy == 'like' and order == 'DESC' %}
+            <img src="{{ asset('img/arrow_upward_alt.svg') }}" alt="">
+        {% else %}
+            <img src="{{ asset('img/arrow_downward_alt.svg') }}" alt="">
+        {% endif %}
+    </a>
+  </div>
+  <div class="form-control gap-2 flex flex-row">
+      <p>Search:</p>
+      <input type="text" class="input input-bordered w-24 md:w-auto" />
+  </div>
+</div>
+
+  <section class="min-h-full h-fit flex flex-row flex-wrap justify-center gap-5 m-8">
 
     {% for article in articles %}
 
       <div class="card bg-base-100 w-96 shadow-xl">
         <figure>
           <img
-          src="uploads/{{article.image}}"
+          src={{ asset('uploads/' ~ article.image) }}
           alt="Cover" />
         </figure>
         <div class="card-body">
+          <p class=" flex flex-row gap-2"><img src={{ asset("img/like.svg") }} alt="" class=" size-6">{{ article.liked }}</p>
           <h2 class="card-title">
             {{ article.title }}
             <div class="badge text-white 
@@ -29,13 +74,14 @@
               {% endif %}
             ">{{ article.category.name }}</div>
           </h2>
+          <p class=" text-xs">Released on: {{ article.date|date("Y/m/d") }}</p>
           <p>{{ article.intro }}</p>
           <div class="card-actions justify-end">
             {% for tag in article.tag %}
               <div class="badge badge-outline">{{ tag.name }}</div>
             {% endfor %}
           </div>
-          <a href="{{ path('app_article_display', {'id': article.id}) }}" class="btn btn-primary mt-8">Read more</a>
+          <a href={{ path('app_article_display', {'id': article.id}) }} class="btn btn-primary mt-8">Read more</a>
         </div>
       </div>
 

@@ -1,4 +1,4 @@
-<header>
+<header style="position: sticky; top: 0; z-index: 2;">
 
     <div class="navbar bg-base-100">
 
@@ -6,7 +6,7 @@
             <a class="btn btn-ghost text-xl" href="{{ path("app_home") }}"><img src="{{ asset('img/speaker.svg') }}" alt="Speaker icon" class=" fill-current">Home</a>
             {% if app.user %}
                 <a class="btn btn-ghost text-xl" href="{{ path("app_article_write") }}"><img src="{{ asset('img/write.svg') }}" alt="Home icon"  class=" text-current">Write</a>
-                {# <a class="btn btn-ghost text-xl" href="{{ path("app_article_write") }}"><img src="{{ asset('img/write.svg') }}" alt="Home icon"  class=" text-current">Write</a> #}
+                <a class="btn btn-ghost text-xl" href="{{ path("app_category") }}"><img src="{{ asset('img/category.svg') }}" alt="Home icon"  class=" text-current">Category</a>
             {% endif %}
         </div>
 

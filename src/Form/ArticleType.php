@@ -41,7 +41,7 @@ class ArticleType extends AbstractType
             ])
             ->add('date', DateTimeType::class, [
                 'widget' => 'single_text',
-                'data' => new \DateTime('now'),
+                'format' => 'yyyy-MM-dd',
                 'required' => true,
                 'label' => false,
                 'attr' => [
@@ -78,9 +78,9 @@ class ArticleType extends AbstractType
                 'choice_label' => 'name',
                 'expanded' => true,
                 'multiple' => true,
-                'attr' => [
-                    'class' => 'flex flex-row mb-5 h-fit gap-4'
-                ]
+                // 'attr' => [
+                //     'class' => 'flex flex-row flex-wrap mb-4 h-fit gap-5'
+                // ],
             ])
         ;
     }

@@ -25,8 +25,7 @@ class Article
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    // private ?\DateTimeInterface $date = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private $date;
 
 
@@ -49,7 +48,7 @@ class Article
     {
         $this->tag = new ArrayCollection();
         // $this->date = null;
-        $this->date = new \DateTime();
+        // $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -105,7 +104,7 @@ class Article
         return $this->date;
     }
 
-    public function setDate(\DateTimeInterface $date): static
+    public function setDate(?\DateTimeInterface $date): self
     {
         $this->date = $date;
 
